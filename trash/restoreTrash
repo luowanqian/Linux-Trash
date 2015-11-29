@@ -1,0 +1,22 @@
+#!/bin/bash
+
+basepath=$(cd `dirname $0`; pwd)
+trashpath=$($basepath/getTrashPath)
+logpath=$trashpath/.log
+
+originalPath=$(awk /$filename/'{print $4}' "$logpath")
+filenameNow=$(awk /$filename/'{print $1}' "$logpath")
+filenamebefore=$(awk /$filename/'{print $2}' "$logpath")
+echo "You are about to restore $filenameNow, original name is $filenamebefore"
+echo "Original path is $originalPath"
+
+echo -ne "Are you sure to do that? [Y/N]: "
+read reply
+if [ $reply = "y" ] || [ $reply = "Y" ]
+then
+	$(mv -b "$trashpath/$filenameNow" "$originalPath")
+	$(sed -i /$filenameNow/'d' "$logpath")
+	echo "Restore succeed!"
+else
+	echo "No files restored"
+fi

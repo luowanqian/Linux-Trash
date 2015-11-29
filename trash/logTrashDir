@@ -1,0 +1,12 @@
+#!/bin/bash
+
+basepath=$(cd `dirname $0`; pwd)
+trashpath=$($basepath/getTrashPath)
+logpath=$trashpath/.log
+
+if [ ! -f "$logpath" ]
+then
+	touch $logpath
+	chmod 700 $logpath
+fi
+echo $1 $2 $3 $4 >> $logpath
